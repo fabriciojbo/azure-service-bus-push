@@ -1,5 +1,16 @@
 {
   "name": "azure-service-bus-push",
+  "description": "CLI para publicar mensagens JSON em filas ou tópicos do Azure Service Bus",
+  "author": {
+    "name": "Fabricio Pereira Rabelo",
+    "email": "fabriciojb@gmail.com",
+    "url": "https://github.com/fabriciojbo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabriciojbo/azure-service-bus-push.git"
+  },
+  "license": "MIT",
   "version": "0.1.0",
   "private": true,
   "type": "module",
