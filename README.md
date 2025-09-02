@@ -9,7 +9,7 @@ CLI simples para publicar mensagens JSON em filas ou tópicos do Azure Service B
 - Valida caminho do arquivo e conteúdo JSON
 - Define `contentType: application/json`
 - Suporte a `--correlation-id` (gera UUID v4 se omitido)
-- Aliases curtos: `-Q`/`--queue`, `-T`/`--topic`, `-P`/`--payload`, `-H`/`--help`
+- Aliases curtos: `-D`/`--destination`, `-Y`/`--type`, `-Q`/`--queue`, `-T`/`--topic`, `-P`/`--payload`, `-H`/`--help`, `--cid` para `--correlation-id`
 
 ## Requisitos
 
@@ -87,6 +87,7 @@ pnpm push -H
 - `--payload`, `-p`, `-P`: caminho do arquivo JSON a ser enviado (obrigatório)
 - `--correlation-id`, `--cid`: Correlation ID; se omitido, gera-se um UUID v4
 - `--help`, `-h`, `-H`: exibe ajuda
+- `--version`: exibe a versão do CLI
 
 Validações de uso:
 
