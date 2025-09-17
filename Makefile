@@ -1,7 +1,7 @@
 .PHONY: build run clean install test lint fmt vet help
 
 # Variables
-BINARY_NAME=push
+BINARY_NAME=sb-push
 BUILD_DIR=bin
 MAIN_FILE=main.go
 
