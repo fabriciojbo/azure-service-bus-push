@@ -1,4 +1,4 @@
-# Azure Service Bus Push (Node + TypeScript)
+# Azure Service Bus Push (Go)
 
 CLI simples para publicar mensagens JSON em filas ou tópicos do Azure Service Bus, lendo a conexão de variáveis de ambiente (`.env`) e validando parâmetros, arquivo e JSON. Inclui suporte a Correlation ID e aliases para os principais comandos.
 
@@ -9,17 +9,18 @@ CLI simples para publicar mensagens JSON em filas ou tópicos do Azure Service B
 - Valida caminho do arquivo e conteúdo JSON
 - Define `contentType: application/json`
 - Suporte a `--correlation-id` (gera UUID v4 se omitido)
-- Aliases curtos: `-D`/`--destination`, `-Y`/`--type`, `-Q`/`--queue`, `-T`/`--topic`, `-P`/`--payload`, `-H`/`--help`, `--cid` para `--correlation-id`
+- Aliases curtos: `-d`/`--destination`, `-y`/`--type`, `-q`/`--queue`, `-t`/`--topic`, `-p`/`--payload`, `-h`/`--help`, `--cid` para `--correlation-id`
 
 ## Requisitos
 
-- Node.js 18+
-- pnpm 8+
+- Go 1.21+
 
 ## Instalação
 
 ```bash
-pnpm install
+go mod download
+# ou usando Makefile
+make install
 ```
 
 ## Configuração de Ambiente
@@ -45,49 +46,54 @@ Observações:
 Modo simplificado (recomendado):
 
 ```bash
-pnpm push --destination <nome> --type queue --payload </caminho/para/payload.json>
-pnpm push --destination <nome> --type topic --payload </caminho/para/payload.json>
+./bin/push --destination <nome> --type queue --payload </caminho/para/payload.json>
+./bin/push --destination <nome> --type topic --payload </caminho/para/payload.json>
 
 # Aliases equivalentes
-pnpm push -D <nome> -Y queue -P </caminho/para/payload.json>
-pnpm push -D <nome> -Y topic -P </caminho/para/payload.json>
+./bin/push -d <nome> -y queue -p </caminho/para/payload.json>
+./bin/push -d <nome> -y topic -p </caminho/para/payload.json>
+
+# Usando go run
+go run main.go --destination <nome> --type queue --payload </caminho/para/payload.json>
+
+# Usando Makefile
+make run ARGS="--destination <nome> --type queue --payload </caminho/para/payload.json>"
 ```
 
 Modo legado (também suportado):
 
 ```bash
-pnpm push --queue <nome-da-fila> --payload </caminho/para/payload.json>
-pnpm push --topic <nome-do-topico> --payload </caminho/para/payload.json>
+./bin/push --queue <nome-da-fila> --payload </caminho/para/payload.json>
+./bin/push --topic <nome-do-topico> --payload </caminho/para/payload.json>
 
 # Aliases equivalentes
-pnpm push -Q <nome-da-fila> -P </caminho/para/payload.json>
-pnpm push -T <nome-do-topico> -P </caminho/para/payload.json>
+./bin/push -q <nome-da-fila> -p </caminho/para/payload.json>
+./bin/push -t <nome-do-topico> -p </caminho/para/payload.json>
 ```
 
 Correlation ID explícito (opcional):
 
 ```bash
-pnpm push -Q sq.pismo.onboarding.succeeded -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
+./bin/push -q sq.pismo.onboarding.succeeded -p /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
 ```
 
 Ajuda do CLI:
 
 ```bash
-pnpm push --help
+./bin/push --help
 # ou
-pnpm push -H
+make run ARGS="--help"
 ```
 
 ## CLI (Opções)
 
-- `--destination`, `-d`, `-D`: nome do destino unificado (fila ou tópico)
-- `--type`, `-y`, `-Y`: tipo do destino unificado: `queue` ou `topic`
-- `--queue`, `-q`, `-Q`: nome da fila (modo legado; exclusivo com `--topic`)
-- `--topic`, `-t`, `-T`: nome do tópico (modo legado; exclusivo com `--queue`)
-- `--payload`, `-p`, `-P`: caminho do arquivo JSON a ser enviado (obrigatório)
+- `--destination`, `-d`: nome do destino unificado (fila ou tópico)
+- `--type`, `-y`: tipo do destino unificado: `queue` ou `topic`
+- `--queue`, `-q`: nome da fila (modo legado; exclusivo com `--topic`)
+- `--topic`, `-t`: nome do tópico (modo legado; exclusivo com `--queue`)
+- `--payload`, `-p`: caminho do arquivo JSON a ser enviado (obrigatório)
 - `--correlation-id`, `--cid`: Correlation ID; se omitido, gera-se um UUID v4
-- `--help`, `-h`, `-H`: exibe ajuda
-- `--version`: exibe a versão do CLI
+- `--help`, `-h`: exibe ajuda
 
 Validações de uso:
 
@@ -102,19 +108,19 @@ Validações de uso:
 Fila (modo simplificado):
 
 ```bash
-pnpm push --destination sq.pismo.onboarding.succeeded --type queue --payload /Users/fabricio/onboarding.json
+./bin/push --destination sq.pismo.onboarding.succeeded --type queue --payload /Users/fabricio/onboarding.json
 ```
 
 Tópico (modo simplificado):
 
 ```bash
-pnpm push --destination tp.pismo.onboarding.updates --type topic --payload /Users/fabricio/onboarding.json
+./bin/push --destination tp.pismo.onboarding.updates --type topic --payload /Users/fabricio/onboarding.json
 ```
 
 Com Correlation ID explícito:
 
 ```bash
-pnpm push -D sq.pismo.onboarding.succeeded -Y queue -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
+./bin/push -d sq.pismo.onboarding.succeeded -y queue -p /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
 ```
 
 ## Saída (logs)
@@ -127,29 +133,30 @@ Mensagem enviada com sucesso para <fila|tópico>: <nome> (correlationId=<id>)
 
 ## Scripts úteis
 
-- `pnpm push`: executa o CLI de envio
-- `pnpm dev`: roda o CLI em modo watch (para desenvolvimento)
-- `pnpm build`: compila TypeScript
-- `pnpm lint`: verifica problemas com ESLint
-- `pnpm lint:fix`: corrige problemas autofixáveis
-- `pnpm format`: formata com Prettier
-- `pnpm format:check`: checa formatação
+- `make build`: compila o binário Go
+- `make run ARGS="..."`: executa o CLI com argumentos
+- `make install`: instala dependências
+- `make clean`: limpa artefatos de build
+- `make test`: roda testes
+- `make lint`: verifica problemas com linter (requer golangci-lint)
+- `make fmt`: formata código com gofmt
+- `make vet`: verifica problemas com go vet
+- `make dev`: workflow de desenvolvimento (fmt + vet + build)
 
 ## Desenvolvimento
 
-- TypeScript com `strict` e `ESNext`
-- ESLint 9 (flat config) + `typescript-eslint` + `eslint-config-prettier`
-- Prettier 3 com convenções (aspas simples, trailing comma, largura 100)
+- Go 1.21+ com módulos Go
+- Linting com golangci-lint (opcional)
+- Formatação com gofmt
+- Análise estática com go vet
 
 ## Estrutura
 
 ```
-src/
-  push.ts        # CLI principal
-.env.example     # Exemplo de conexão
-eslint.config.mjs
-.prettierrc.json
-tsconfig.json
+main.go         # CLI principal
+go.mod          # Dependências Go
+Makefile        # Scripts de build
+.env.example    # Exemplo de conexão
 ```
 
 ## Dicas e Solução de Problemas
