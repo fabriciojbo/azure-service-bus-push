@@ -42,40 +42,42 @@ Observações:
 
 ## Uso Rápido
 
+**⚠️ Importante:** Use `--` para separar argumentos do npm dos argumentos do CLI.
+
 Modo simplificado (recomendado):
 
 ```bash
-npm push --destination <nome> --type queue --payload </caminho/para/payload.json>
-npm push --destination <nome> --type topic --payload </caminho/para/payload.json>
+npm run push -- --destination <nome> --type queue --payload </caminho/para/payload.json>
+npm run push -- --destination <nome> --type topic --payload </caminho/para/payload.json>
 
 # Aliases equivalentes
-npm push -D <nome> -Y queue -P </caminho/para/payload.json>
-npm push -D <nome> -Y topic -P </caminho/para/payload.json>
+npm run push -- -D <nome> -Y queue -P </caminho/para/payload.json>
+npm run push -- -D <nome> -Y topic -P </caminho/para/payload.json>
 ```
 
 Modo legado (também suportado):
 
 ```bash
-npm push --queue <nome-da-fila> --payload </caminho/para/payload.json>
-npm push --topic <nome-do-topico> --payload </caminho/para/payload.json>
+npm run push -- --queue <nome-da-fila> --payload </caminho/para/payload.json>
+npm run push -- --topic <nome-do-topico> --payload </caminho/para/payload.json>
 
 # Aliases equivalentes
-npm push -Q <nome-da-fila> -P </caminho/para/payload.json>
-npm push -T <nome-do-topico> -P </caminho/para/payload.json>
+npm run push -- -Q <nome-da-fila> -P </caminho/para/payload.json>
+npm run push -- -T <nome-do-topico> -P </caminho/para/payload.json>
 ```
 
 Correlation ID explícito (opcional):
 
 ```bash
-npm push -Q sq.pismo.onboarding.succeeded -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
+npm run push -- -Q sq.pismo.onboarding.succeeded -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
 ```
 
 Ajuda do CLI:
 
 ```bash
-npm push --help
+npm run push -- --help
 # ou
-npm push -H
+npm run push -- -H
 ```
 
 ## CLI (Opções)
@@ -102,19 +104,19 @@ Validações de uso:
 Fila (modo simplificado):
 
 ```bash
-npm push --destination sq.pismo.onboarding.succeeded --type queue --payload /Users/fabricio/onboarding.json
+npm run push -- --destination sq.pismo.onboarding.succeeded --type queue --payload /Users/fabricio/onboarding.json
 ```
 
 Tópico (modo simplificado):
 
 ```bash
-npm push --destination tp.pismo.onboarding.updates --type topic --payload /Users/fabricio/onboarding.json
+npm run push -- --destination tp.pismo.onboarding.updates --type topic --payload /Users/fabricio/onboarding.json
 ```
 
 Com Correlation ID explícito:
 
 ```bash
-npm push -D sq.pismo.onboarding.succeeded -Y queue -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
+npm run push -- -D sq.pismo.onboarding.succeeded -Y queue -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
 ```
 
 ## Saída (logs)
@@ -127,13 +129,29 @@ Mensagem enviada com sucesso para <fila|tópico>: <nome> (correlationId=<id>)
 
 ## Scripts úteis
 
-- `npm push`: executa o CLI de envio
+- `npm run push`: executa o CLI de envio
 - `npm dev`: roda o CLI em modo watch (para desenvolvimento)
 - `npm build`: compila TypeScript
 - `npm lint`: verifica problemas com ESLint
 - `npm lint:fix`: corrige problemas autofixáveis
 - `npm format`: formata com Prettier
 - `npm format:check`: checa formatação
+
+## Alternativas de Execução
+
+Se você preferir evitar o `--` com npm, pode usar:
+
+```bash
+# Com pnpm (recomendado)
+pnpm push --queue fila --payload arquivo.json
+
+# Com tsx diretamente
+npx tsx src/push.ts --queue fila --payload arquivo.json
+
+# Após build
+npm run build
+node dist/push.js --queue fila --payload arquivo.json
+```
 
 ## Desenvolvimento
 
@@ -154,10 +172,32 @@ tsconfig.json
 
 ## Dicas e Solução de Problemas
 
-- Erro de ambiente: verifique se `SB_CONNECTION_STRING` ou `SB_ENDPOINT` está definido no `.env`.
-- Permissões: a SAS policy precisa ter permissão de `Send` para a fila/tópico.
-- JSON inválido: o CLI valida o conteúdo, corrija o arquivo informado em `--payload`.
-- Conflito de destino: informe apenas um entre `--queue` e `--topic`.
+### Problemas Comuns
+
+**Erro: "Unknown cli config" ou argumentos não reconhecidos:**
+```bash
+# ❌ Incorreto (npm interpreta argumentos como configurações próprias)
+npm run push -Q fila -P arquivo.json
+
+# ✅ Correto (use -- para separar argumentos)
+npm run push -- -Q fila -P arquivo.json
+```
+
+**Alternativas ao npm:**
+```bash
+# Usando pnpm diretamente
+pnpm push --queue fila --payload arquivo.json
+
+# Usando tsx diretamente
+npx tsx src/push.ts --queue fila --payload arquivo.json
+```
+
+### Outros Problemas
+
+- **Erro de ambiente:** verifique se `SB_CONNECTION_STRING` ou `SB_ENDPOINT` está definido no `.env`.
+- **Permissões:** a SAS policy precisa ter permissão de `Send` para a fila/tópico.
+- **JSON inválido:** o CLI valida o conteúdo, corrija o arquivo informado em `--payload`.
+- **Conflito de destino:** informe apenas um entre `--queue` e `--topic`.
 
 ---
 
