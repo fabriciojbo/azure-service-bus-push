@@ -59,7 +59,7 @@ async function main() {
   const argv = await yargs(hideBin(process.argv))
     .scriptName('push')
     .usage(
-      'Uso: pnpm push [--destination <nome> --type queue|topic | --queue <nome> | --topic <nome>] --payload <arquivo.json>',
+      'Uso: npm run push -- [--destination <nome> --type queue|topic | --queue <nome> | --topic <nome>] --payload <arquivo.json>',
     )
     .strict()
     .showHelpOnFail(true)
