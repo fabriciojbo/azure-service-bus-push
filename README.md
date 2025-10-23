@@ -14,7 +14,7 @@ CLI simples para publicar mensagens JSON em filas ou tópicos do Azure Service B
 ## Requisitos
 
 - Node.js 18+
-- npm 10+
+- pnpm 8+ (recomendado) ou npm 10+
 
 ## Instalação
 
@@ -24,7 +24,7 @@ npm install
 
 ## Configuração de Ambiente
 
-Crie um arquivo `.env` na raiz do projeto (veja `.env.example`). Aceitamos:
+Crie um arquivo `.env` na raiz do projeto. Aceitamos:
 
 - `SB_CONNECTION_STRING`: conexão completa
 - `SB_ENDPOINT`: alias aceito com o mesmo valor
@@ -34,6 +34,14 @@ Formato esperado (exemplo):
 ```env
 SB_ENDPOINT=Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy-name>;SharedAccessKey=<key>
 ```
+
+### Como obter a Connection String
+
+1. **Azure Portal**: Acesse [portal.azure.com](https://portal.azure.com)
+2. **Service Bus**: Navegue até seu Service Bus Namespace
+3. **Shared Access Policies**: Vá em "Shared access policies"
+4. **Permissões**: Selecione uma política com permissão "Send" ou crie uma nova
+5. **Copiar**: Copie a "Primary Connection String"
 
 Observações:
 
@@ -72,12 +80,15 @@ Correlation ID explícito (opcional):
 npm run push -- -Q sq.pismo.onboarding.succeeded -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
 ```
 
-Ajuda do CLI:
+Ajuda e versão do CLI:
 
 ```bash
 npm run push -- --help
 # ou
 npm run push -- -H
+
+# Verificar versão
+npm run push -- --version
 ```
 
 ## CLI (Opções)
@@ -164,10 +175,10 @@ node dist/push.js --queue fila --payload arquivo.json
 ```
 src/
   push.ts        # CLI principal
-.env.example     # Exemplo de conexão
 eslint.config.mjs
-.prettierrc.json
 tsconfig.json
+package.json
+README.md
 ```
 
 ## Dicas e Solução de Problemas
@@ -198,6 +209,8 @@ npx tsx src/push.ts --queue fila --payload arquivo.json
 - **Permissões:** a SAS policy precisa ter permissão de `Send` para a fila/tópico.
 - **JSON inválido:** o CLI valida o conteúdo, corrija o arquivo informado em `--payload`.
 - **Conflito de destino:** informe apenas um entre `--queue` e `--topic`.
+- **Arquivo não encontrado:** verifique se o caminho do `--payload` está correto e o arquivo existe.
+- **Connection String inválida:** verifique se a string de conexão está completa e válida no Azure Portal.
 
 ---
 

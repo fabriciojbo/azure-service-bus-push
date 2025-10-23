@@ -101,6 +101,7 @@ async function main() {
       type: 'string',
       describe: 'Correlation ID para rastreamento; se omitido, um UUID v4 será gerado',
     })
+    .version()
     .check((args: Record<string, unknown>) => {
       const queue = String(args.queue ?? '').trim();
       const topic = String(args.topic ?? '').trim();
