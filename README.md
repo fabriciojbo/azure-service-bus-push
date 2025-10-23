@@ -14,12 +14,12 @@ CLI simples para publicar mensagens JSON em filas ou tópicos do Azure Service B
 ## Requisitos
 
 - Node.js 18+
-- pnpm 8+
+- npm 10+
 
 ## Instalação
 
 ```bash
-pnpm install
+npm install
 ```
 
 ## Configuração de Ambiente
@@ -45,37 +45,37 @@ Observações:
 Modo simplificado (recomendado):
 
 ```bash
-pnpm push --destination <nome> --type queue --payload </caminho/para/payload.json>
-pnpm push --destination <nome> --type topic --payload </caminho/para/payload.json>
+npm push --destination <nome> --type queue --payload </caminho/para/payload.json>
+npm push --destination <nome> --type topic --payload </caminho/para/payload.json>
 
 # Aliases equivalentes
-pnpm push -D <nome> -Y queue -P </caminho/para/payload.json>
-pnpm push -D <nome> -Y topic -P </caminho/para/payload.json>
+npm push -D <nome> -Y queue -P </caminho/para/payload.json>
+npm push -D <nome> -Y topic -P </caminho/para/payload.json>
 ```
 
 Modo legado (também suportado):
 
 ```bash
-pnpm push --queue <nome-da-fila> --payload </caminho/para/payload.json>
-pnpm push --topic <nome-do-topico> --payload </caminho/para/payload.json>
+npm push --queue <nome-da-fila> --payload </caminho/para/payload.json>
+npm push --topic <nome-do-topico> --payload </caminho/para/payload.json>
 
 # Aliases equivalentes
-pnpm push -Q <nome-da-fila> -P </caminho/para/payload.json>
-pnpm push -T <nome-do-topico> -P </caminho/para/payload.json>
+npm push -Q <nome-da-fila> -P </caminho/para/payload.json>
+npm push -T <nome-do-topico> -P </caminho/para/payload.json>
 ```
 
 Correlation ID explícito (opcional):
 
 ```bash
-pnpm push -Q sq.pismo.onboarding.succeeded -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
+npm push -Q sq.pismo.onboarding.succeeded -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
 ```
 
 Ajuda do CLI:
 
 ```bash
-pnpm push --help
+npm push --help
 # ou
-pnpm push -H
+npm push -H
 ```
 
 ## CLI (Opções)
@@ -102,19 +102,19 @@ Validações de uso:
 Fila (modo simplificado):
 
 ```bash
-pnpm push --destination sq.pismo.onboarding.succeeded --type queue --payload /Users/fabricio/onboarding.json
+npm push --destination sq.pismo.onboarding.succeeded --type queue --payload /Users/fabricio/onboarding.json
 ```
 
 Tópico (modo simplificado):
 
 ```bash
-pnpm push --destination tp.pismo.onboarding.updates --type topic --payload /Users/fabricio/onboarding.json
+npm push --destination tp.pismo.onboarding.updates --type topic --payload /Users/fabricio/onboarding.json
 ```
 
 Com Correlation ID explícito:
 
 ```bash
-pnpm push -D sq.pismo.onboarding.succeeded -Y queue -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
+npm push -D sq.pismo.onboarding.succeeded -Y queue -P /Users/fabricio/onboarding.json --correlation-id 123e4567-e89b-12d3-a456-426614174000
 ```
 
 ## Saída (logs)
@@ -127,13 +127,13 @@ Mensagem enviada com sucesso para <fila|tópico>: <nome> (correlationId=<id>)
 
 ## Scripts úteis
 
-- `pnpm push`: executa o CLI de envio
-- `pnpm dev`: roda o CLI em modo watch (para desenvolvimento)
-- `pnpm build`: compila TypeScript
-- `pnpm lint`: verifica problemas com ESLint
-- `pnpm lint:fix`: corrige problemas autofixáveis
-- `pnpm format`: formata com Prettier
-- `pnpm format:check`: checa formatação
+- `npm push`: executa o CLI de envio
+- `npm dev`: roda o CLI em modo watch (para desenvolvimento)
+- `npm build`: compila TypeScript
+- `npm lint`: verifica problemas com ESLint
+- `npm lint:fix`: corrige problemas autofixáveis
+- `npm format`: formata com Prettier
+- `npm format:check`: checa formatação
 
 ## Desenvolvimento
 
